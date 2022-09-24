@@ -36,12 +36,12 @@ productos.push(producto9);
 productos.push(producto10);
 
 productos.forEach(prod => {
-    contenedor.innerHTML += `
+    contenedor.innerHTML +=  `
     <div class="card border-primary mb-3 text-center" style="max-width: 15rem; margin:4px">
         <div class="card-header name" style="max-width: 15rem; margin:4px">${prod.nombre}</div>
         <img src="img/${prod.img}" class="card-img-top" alt="...">
         <div class="card-body">
-            <h4 class="card-title">${prod.precio}</h4>
+            <h4 class="card-title">$${prod.precio}</h4>
             <button class="btn btn-success my-3 agregar-carrito" data-id="${prod.id}">Agregar al carrito</button>
         </div>
     </div>
@@ -50,6 +50,7 @@ productos.forEach(prod => {
 })
 
 let butons = document.querySelectorAll(".agregar-carrito");
+
 
 
 
@@ -77,25 +78,26 @@ const guardarProductosLocalStorage = (producto)=>{
 
 const insertarCarrito = (producto)=>{
     const listaProductos = document.querySelector('.contenido');
-    console.log(listaProductos)
+    
     const row = document.createElement('tr');
     row.innerHTML = `
         <td class="align-middle">
             <img src="${producto.img}" width="100">
         </td>
         <td class="align-middle text-wrap">${producto.nombre}</td>
-        <td class="align-middle text-center">$${producto.precio}</td>
+        <td class="align-middle text-center">${producto.precio}</td>
         <td class="align-middle text-center">
             <input type="number" value="1" min="1" class="w-50">
         </td>
         <td class="align-middle text-center">
-            <button id="${producto.id}" data-id="${producto.id}" type="button" class="btn btn-danger">
+            <button data-id="${producto.id}" type="button" class="btn btn-danger">
                 <i class="bi bi-trash-fill"></i>
             </button>
         </td>
     `;
     
     listaProductos.appendChild(row);
+
     guardarProductosLocalStorage(producto);
     
 }
@@ -124,7 +126,7 @@ butons.forEach(buton =>{
                 icon: 'info',
                 text: `Producto ${info.nombre} ya se encuentra en el carrito`,
                 showConfirmButton: false,
-                timer: 1500
+                timer: 2000
             })
         }else{
             Toastify({
@@ -177,11 +179,14 @@ const vaciarLocalStorage = ()=>{
 // Elimina todos los productos
 const vaciarCarrito = ()=>{
     const listaProductos = document.querySelector('.contenido');
-    while(listaProductos.firstChild){
-        listaProductos.removeChild(listaProductos.firstChild);
+    // console.log(listaProductos.firstChild)
+    while(listaProductos.firstElementChild){
+        const listaTr = listaProductos.querySelectorAll('tr');
+        listaTr.forEach((fila)=>{
+            fila.remove();
+        })
     }
     vaciarLocalStorage();
-    return false;
 }
 
 let boton = document.getElementById('vaciar');
@@ -189,6 +194,7 @@ let boton = document.getElementById('vaciar');
 boton.addEventListener('click', ()=>{
     vaciarCarrito();
 })
+
 
 
 
